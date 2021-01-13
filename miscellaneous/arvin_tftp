@@ -1,0 +1,91 @@
+tftp -p -l /var/log/libmctp_lsi.txt -r libmctp_lsi.txt [IP address]
+
+=============== method1 =============================
+[success] this method is dowload only
+
+The servers that can be managed by the xinetd daemon are each listed in a server-specific configuration file located in the directory /etc/xinetd.d. The file for the TFTP server is named tftp, and looks like the following:
+
+# default: off
+# description: The tftp server serves files using the Trivial File Transfer \
+#    Protocol.  The tftp protocol is often used to boot diskless \
+#    workstations, download configuration files to network-aware printers, \
+#    and to start the installation process for some operating systems.
+service tftp
+{
+    socket_type     = dgram
+    protocol        = udp
+    wait            = yes
+    user            = froot
+    server          = /usr/sbin/in.tftpd
+    server_args     = -s /home/froot/tftpboot
+    disable         = yes
+}
+/etc/inetd.conf
+
+Restarting the Service
+# /etc/init.d/xinetd restart
+# /etc/init.d/inetd restart
+
+ps -alxww | grep inet
+
+=============== method2 =============================
+[fail]this way will be fail the user can not be nobody. 
+beside this, other information is good to referance.
+
+TFTP Server Install and Setup
+
+1. Install following packages.
+
+sudo apt-get install xinetd tftpd tftp
+
+2. Create /etc/xinetd.d/tftp and put this entry
+
+service tftp
+{
+protocol        = udp
+port            = 69
+socket_type     = dgram
+wait            = yes
+user            = nobody
+server          = /usr/sbin/in.tftpd
+server_args     = /tftpboot
+disable         = no
+}
+
+3. Create a folder /tftpboot this should match whatever you gave in server_args. mostly it will be tftpboot
+
+sudo mkdir /tftpboot
+sudo chmod -R 777 /tftpboot
+sudo chown -R nobody /tftpboot
+4. Restart the xinetd service.
+
+newer systems:
+sudo service xinetd restart
+older systems:
+sudo /etc/init.d/xinetd restart
+
+Now our tftp server is up and running.
+
+
+
+=============== method2 =============================
+[success]
+step 1:
+sudo aptitude install tftp-server
+it will choose the tftpd-hpa.
+
+step 2: 
+modified file "sudo vim /etc/default/tftpd-hpa"
+TFTP_USERNAME="froot"
+TFTP_DIRECTORY="/home/froot/tftpboot"
+TFTP_ADDRESS=":69"
+TFTP_OPTIONS="-l -c -s"
+
+step 3:
+mkdir ~/tftpboot
+chmod -R 777 tftpboot
+
+step 4:
+sudo service tftpd-hpa restart
+sudo service tftpd-hpa status
+

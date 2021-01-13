@@ -1,0 +1,139 @@
+#
+# --------------------------------
+# ----------referance-------------
+http://www.atlassian.com/git/tutorials
+http://blog.longwin.com.tw/2009/05/git-learn-initial-command-2009/
+project/.git/config
+https://www.slideshare.net/appleboy/introduction-to-git-11436559
+https://blog.yorkxin.org/2011/07/29/git-rebase
+
+# --------------------------------
+# git's message is useful for operating. 
+# therefore, strong recomment to read the message deeply after execute command.
+
+ git clone git@ip:path ./savetofolder # the private/public key file should be 600 for ssh permissions
+
+ git init  # initial a repository
+ git add * # add all files after initial a repository
+
+
+ git add # the status will be staged (added a new item/file... or added a modified item to stage for commit.)
+ git commit # put the item to local git. and the status will be unmodified.
+ git commit --amend # rewrite last commit message after commit.
+ untrack (modify/add new files)-> stage (ucommit/ add file to track list) --> commit (add file to git)
+
+ git config --list
+ git config --global commit.template ./git-commit-mesg-template.txt # default git commit message template.
+ git config --global user.name "arvin"
+ git config --global user.email "arvin@email.com"
+ git config --global user.default matching  # push all the same branch name to remote.
+ git config --global user.default simple    # push currunt branch to remote.
+
+ git status ## very very important IIVI.
+
+ git branch #list curruntly branch	
+ git branch new-branch master # create a new-branch from master
+ git checkout -b new-branch #create a new-branch, and switch to new-branch
+ git checkout -b branch2 branch1 # create branch2 and branch off from branch1
+
+ git branch -r # list all remote branch (remote = origin)
+ git branch -a # list all branch 
+ git branch -v # list the branch content.
+ git branch -m branch1 branch2 # rename a branch1 to branch2
+ git branch --merged # list merged branch.
+ git branch --no-merged # list did not merged branch.
+ git branch -d branchname # delete a branch from local
+ git push origin branchname # upload a branch to remote
+ git push origin :branchname # delete a branch from remote, the ":" is used to delete
+ git push origin branchname1:branchname2 # push a branchname1 to branchname2.
+ git push origin --set-upstream branchname1 # push a branchname1 and set branch sync to origin
+
+ git checkout branch-name # switch to branch-name
+
+ git checkout -f # recovery the data to latest source code version in git.
+
+########
+# move the HEAD to last time. the other means remove the latest commit in the local.
+ git reset --soft HEAD~1
+ git reset --hard
+ git reset HEAD   # staged -> modified (if add wrong file, it can be used reback the stage to original.)
+ git reset HEAD <file> # staged -> modified (reback stage status to unstage status)
+
+########
+# merge
+ git checkout branchname1 # before merge, switch to target branch.
+ git merge branchname2 # merge branchname2 to branchname1. 
+ git merge --no-ff branchname2 # no fast forward - merge from branchname2 to branchname1. it will lost branch info with fast forward when user delete the branch.
+
+#cherry-pick
+git cherry-pick commit# --no-commit # just got the code first without commit
+
+########
+# git log
+ git log --graph --oneline --all ### list the tree
+ git log --name-only   ### list changed file for each commit.
+ git log --stat ## litke as --name-only
+ git log --pretty=format:'%h' ### list the commit number only
+ git log --pretty=format:"%h - %an, %ar: %s"
+ git show [commit number] ### show only one commit log
+
+########
+# tags
+ git push origin --tags # push all tags to remote.
+ git tag -l # list tag
+ git tag -a tag_name -m 'release xxxx' commit_id # add a tag
+ git tag -d tag_name # delete tag
+
+########
+# diff
+ git diff old_commit new_commit
+
+########
+# clean
+git clean -dfx
+
+
+########
+# ignore
+ .git/info/exclude ## this is used for untrack file. 
+ .gitignore
+ git update-index --assume-unchanged [path/to/file.txt]    ## add file into ignore list 
+                                                           ## if the file is track by git.
+ git update-index --no-assume-unchanged [path/to/file.txt] ## remove file from ignore list 
+                                                           ## if the file is track by git.
+ git ls-files -v | grep ^h ## list ignore file if the files is track by git.
+
+
+########
+# github 
+# --bare will clone a pure repository (not source code).
+git clone --bare https://github.com/exampleuser/public-repo.git
+cd public-repo.git
+git push --mirror https://github.com/yourname/private-repo.git
+cd ..
+rm -rf public-repo.git
+
+#-----------------------------
+########
+#git can not commit a folder that is empty. therefore, it MUST to put something in the folder.
+ find . -type d -empty -exec touch {}/.gitkeep \;
+
+# git clone whithout ssl varify and ssh key.
+# for https git clone https://xxxx
+export GIT_SSL_NO_VERIFY=1
+
+#-----------------------------
+########
+Luke's note - how to create a new branch on Bob's git server
+https://www.evernote.com/aaarrv/shard/s262/sh/5bd5c494-ed56-4905-a260-7614b02e6222/7aac7427c6552fd2
+
+Luke's Note for MDS
+
+How to create an spx package to development OEM features --->
+http://www.evernote.com/l/aaarrv/AQZupKY_dllBB5T9j_k-ZJcE9vwNdhO9IuM/
+EBU RDC2 RDD7 Portal - 2500 OCB architecture for OEM code ---> 
+http://www.evernote.com/l/aaarrv/AQaVAamoOlxL74FJ4VqBluIGxAKjNN2YwXE/
+
+
+
+

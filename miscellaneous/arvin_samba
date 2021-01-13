@@ -1,0 +1,55 @@
+
+==========================
+## For add user to samba in Sam's server.
+
+useradd -G svngrp bobku
+smbpasswd -a bobku
+
+==========================
+
+adduser
+#added new persion
+smbpasswd -a user_name
+
+cat /etc/passwd
+cat /etc/group
+
+pdbedit
+
+pdbedit -a -u user_name
+
+==========================
+# mount samba server from server_ip folder server_a to folder local_a
+mount -t cifs -o username="xxx",password="xxx" //server_ip/server_a/ /local_a
+mount -t cifs //server_ip/server_a/ /local_a -o username="xxx",password="xxx",user,file_mode=0777,dir_mode=0777
+mount -t cifs //server_ip/server_a/ /local_a -o username="xxx",password="xxx",user,file_mode=0777,dir_mode=0777,vers=1.0
+
+==========================
+https://askubuntu.com/questions/820549/ubuntu-16-samba-server-with-windows-10-client-tutorial-howto
+1. install samba
+   sudo apt-get install samba
+2. set the username and password 
+   sudo smbpasswd -a froot 
+   Adds the user froot to the Samba database and activates it. 
+     (Usually different password than froot in Ubuntu itself. 
+     The password is what you need to enter later when connecting with the Windows 10 client to the server)
+3. set below confisure in smb.conf 
+  sudo vim /etc/samba/smb.conf
+
+[froot] ; displayed on the windows network.
+  comment = comment
+  path=/home/froot
+  available=yes
+  valid users=froot, root, arvin, @sudo ; @sudo is means group sudo. 
+  write list=@sudo  ; 
+  read only=no
+  browseable=yes
+  public=yes
+  writable=yes
+  guest ok = no
+  map archive=no
+  create mask=0775
+  directory mode=0775
+
+
+

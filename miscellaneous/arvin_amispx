@@ -1,0 +1,61 @@
+
+
+
+## Configure for Get Device ID -------------- 
+(in the configs/ast2400evb.PRJ)
+  --CONFIG_SPX_MAP_AST2400EVB_ATTR_Major="7"
+  --CONFIG_SPX_MAP_AST2400EVB_ATTR_Minor="8"
+  --CONFIG_SPX_MAP_AST2400EVB_ATTR_Aux="999999" // only accept six charactor.
+(int the "packages_decompress/libipmipdk-ARM-AST2400-AST2400EVB-AMI-src/data/PDKHooks.c")
+  int PDK_GetMfgProdID (INT8U* MfgID, INT16U* ProdID, int BMCInst)
+  {	
+    // two bytes for ProdID in "IPMI Get Device ID command"
+    *ProdID = 0xa2a1;
+    // three bytes for MFG ID in "IPMI Get Device ID command" 
+    MfgID[0] = 0xb1;
+    MfgID[1] = 0xb2;
+    MfgID[2] = 0xb3;
+    return 0:
+  }  
+
+## Luke 's note -----------------------------
+
+Luke's Note for AMI SPX MDS
+
+How to create an spx package to development OEM features --->
+http://www.evernote.com/l/aaarrv/AQZupKY_dllBB5T9j_k-ZJcE9vwNdhO9IuM/
+
+libMicHW is a spx pakcage name for a fw lib/module. 
+the file structure suppose as below.
+./data/
+   --All source codes of "libMicHW" packages will be put in this directory.
+   --the folder could be changed it will not be always data.
+   --sometimes the source code files will be the same level as "./Makefile"
+./spx/PACKAGES.D/
+   --All the files and directories under this path, will be used achieve below functions:
+   --it also can be modified via MDS interface.
+./spx/PACKAGES.D/libMicHW  
+   --The "libMicHW" directory name could be shown as a configuration item in Project Configuration.
+./spx/PACKAGES.D/libMicHW/SCRIPTS/dev-install 
+   --in the MDS > package properties > "Build Packages" > Scripts > dev-install 
+   --Used to install built binary files into corresponding path.
+   --like as: ipmitool will be move into PATCH-(/usr/local/bin/).
+./spx/PACKAGES.D/libMicHW/P.CONFIG  
+   --in the MDS > package properties > "Build Packages" > Configurations 
+   --Used to control the menu and items in Project Configuration.
+./spx/P.CONFIG  
+   --in the MDS > package properties > "Build Details" 
+   --Used to control the menu and items in Project Configuration.
+./spx/RULES  
+   --in the MDS > package properties > "Build Details" 
+   --Rules to "build", "clean", and copy built binary files to tmp directory for dev_install file to use.
+./Makefile
+   --list the include files /source code file /lib files
+
+EBU RDC2 RDD7 Portal - 2500 OCB architecture for OEM code ---> 
+http://www.evernote.com/l/aaarrv/AQaVAamoOlxL74FJ4VqBluIGxAKjNN2YwXE/
+
+
+
+
+

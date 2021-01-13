@@ -1,0 +1,166 @@
+
+#referance
+# https://www.programering.com/a/MzM5ITNwATM.html
+
+## load .vimrc when vim is executed.
+:source ~/.vimrc
+
+##################
+^         = like as HOME key, not inclue space
+0         = HOME key
+$         = END key
+Ctrl+f    = Page Down
+Ctrl+b    = Page Up
+Ctrl+g/G  = currunt filename
+*         = search word that is in current cursor
+
+yy / dd       : copy/delete a line
+nyy / ndd       : copy/delete n line
+
+p         : paste buffer after cursor.
+P         : paste buffer before cursor.
+
+x = delete key
+X = backspace
+
+gg        : go to first line
+G         : go to latest line
+nG        : go to n line
+yG / dG   : copy/delete from mouse point to END.
+
+
+. / Ctrl+r: is use repeat action.
+u         : restore last action.
+
+
+####################
+# visual mode
+v         : choose/mark a area. entry a visual mode. (Line base)
+Ctrl+v    : choose/mark a area. entry a visual mode. (block base)
+va{       : choose/mark a area, from { to }. include {}.
+va(       : choose/mark a area, from ( to ). include ().
+vi{       : choose/mark a area, from { to }.
+vi(       : choose/mark a area, from ( to ). 
+"in visual mode" 
+  >       : increase indent - a Tab.
+  <       : decrease indent - a Tab.
+
+####################
+# multiple windows
+:help wincmd # for more information
+:new        # open a new windows
+:vnew       # open a vertical windows
+
+:split      # split windows to left and right (horizontally)
+:vsplit     # split windows to up and down (vertical)
+:diffsplit
+
+:resize +5
+:resize -5
+:vertical resize -2
+
+# after press "Ctrl+w"
+  w       # jump to another windows
+  h/j/k/l # jump to left/down/up/right
+  H/J/K/L # move the windows to left/down/up/right
+  r/R     # move win to "down or right" / "up or left"
+
+####################
+# open file
+
+:e     # open a file
+:n     # jump to next one.
+:N     # jump to previous one.
+:file  # check currunt file name
+
+:files      # list open file
+N Ctrl+^    # jump to N number for file
+:help files # for more information
+:buffer # list item in the buffer
+
+
+####################
+# Hightlight
+
+:highlight # list hightlight setting
+:help cterm-colors # list the color mapping table
+
+:syntax on    # highlight different color for lanquage
+:syntax reset #
+:syntax off   #
+
+####################
+# insermode completion
+
+:help ins_completion
+Ctrl+N        # Complete a word, Search backwards for next matching line.
+Ctrl+P        # Complete a word, Search forward for next matching line.
+Ctrl+X CTrl_L # Complete Whole line
+
+:set complete # display whst set list curruntly.
+:set complete+=k # search dictionary scanning
+:set complete-=k # remove
+:set dictionary=./ # search from dictionary file from 
+
+####################
+# omni completion.
+set ofu=syntaxcomplete#Complete      # for omni completion, but it not work.
+filetype plugin on                   #
+set omnifunc=syntaxcomplete#Complete #
+
+
+
+
+####################
+# map
+:map  # Display nmap + vmap + omap 
+:nmap # Display normal mode maps
+:vmap # Display visual and select mode maps (smap + xmap)
+:omap # Display operator pending mode map
+
+:map! # Display imap + cmap
+:imap # Display insert mode maps
+:cmap # Display command-line mode maps
+
+:smap # Display select mode maps
+:xmap # Display visual mode maps
+
+####################
+:1,$s/word1/word2/g : search whole file for word1 + use word2 to instead of word1.
+:set nu             : show line number
+:set shiftwidth=1   : Referred to for shift-left-right commands. 
+                      How much whitespace should be inserted per > command? 
+                      How much whitespace should be removed per < command. 
+                      If disabled, the value of tabstop will be used for both < and >
+:set tabstop=1      : How many columns wide is a tab character?
+
+# edit hex file
+:%!xxd     ## entry to HEX mode.
+:%!xxd -r  ## return to normal mode.
+
+
+####################
+# vimdiff
+####################
+
+vimdiff file1 file2
+viewdiff file1 file2 # read only
+]c: next difference
+[c: previous difference
+
+:set noscrollbind
+:set nocursorbind
+
+Shift + v # entry select mode and use 'y' to copy contect 'p' to paste
+do    : diff optain
+dp    : diff put
+zo    : open folded text
+zc    : close folded text
+zr    :
+
+:diffupdate : re-scan the files for differences
+:diffthis   : invoke diff mode
+:vert diffsplit  : 
+:diffoff    :turnoff diff
+
+

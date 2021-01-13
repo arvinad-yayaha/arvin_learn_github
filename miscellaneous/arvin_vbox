@@ -1,0 +1,38 @@
+
+===============================
+= This sharing hard disk of virtualbox
+===============================
+# mount sf_project1 to sf_project2
+# the sf_project1 setting from ""Devices > Share Folders > Share Folders Setting"" the name of Machine/Transient Folders
+sudo mount -t vboxsf sf_project1 ./sf_project2/
+
+
+===============================
+= This sharing hard disk of virtualbox
+===============================
+
+step 1:start the Linux Virtual Machine
+step 2: execute below command to zero-fill any free disk space on the virtual linux drive
+dd if=/dev/zero of=zerofillfile bs=1M
+
+if=    ##specifies the input file;
+/dev/zero in ## indicates a bit-stream of zeros
+of=    ## specifies the output file
+zerofillfile ## name of the file containing the bit-stream of zeros
+bs=    ## indicates the block size
+1M     ## indicates that the block size will be 1 megabyte 
+
+once the dd has completed, you will see a message in your terminal window indicating that there is no space left on the device:
+dd: writing ' zerofillfile': No space left on device
+
+step 3: rm zerofillfile
+
+step 4: shutdown the Linux Virtual Machine
+step 5: compact the linux guest image
+C:\"Program Files"\Oracle\VirtualBox\VBoxManage.exe # this utility MUST run in this PATH
+vboxmanage modifyhd --compact PATH\xxxvdi
+vboxmanage modifymedium --compact PATH\xxxvdi
+
+
+
+

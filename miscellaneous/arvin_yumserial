@@ -1,0 +1,18 @@
+
+list installed packges
+rpm -qa
+yum list installed
+
+intall rpm package
+yum -Uhv package.rpm
+
+remove package
+rpm -e package_name
+
+
+
+check service status
+systemctl list-unit-files
+
+
+

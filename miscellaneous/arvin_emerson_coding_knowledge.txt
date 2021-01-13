@@ -1,0 +1,130 @@
+-----------------------------------------------------------------------------------------------------------
+#  Mount Emerson Build Machine
+mount -t nfs 10.99.6.204:/home/Project/r37_1116/ast2400_evb_build /mnt/NFS
+mount -t nfs 10.99.6.204:/home/Project/r37_1116/ast2400_evb_build/apps/ipmi /mnt/NFS/
+/home/Project/EMS_ast2500_0810/ast2500_evb_build/apps/ipmi/platform
+-----------------------------------------------------------------------------------------------------------
+#  Run Remote fullfw
+killall -9 AppMonitor
+killall -9 fullfw
+mount -t nfs 10.99.6.204:/home/Project/r43_1207/ast2400_evb_build/apps/ipmi/ /mnt/NFS/
+export PATH=/mnt/NFS/platform/evb:$PATH
+cd /mnt/NFS/platform/evb/
+./fullfw& 
+
+killall -9 fullfw
+
+-----------------------------------------------------------------------------------------------------------
+#  GPIO TEST
+ex GPIOC1  =  GPIO17
+ex 
+GPIOF1  =  GPIO 41 
+GPIOO7  =  GPIO 119
+
+				[pin num]
+#Read Pin status				
+gpiolib_test_S -p 20 -s
+
+#Read Pin value
+gpiolib_test_S -p 20 -r
+
+#Write Pin to high 
+gpiolib_test_S -p 20 -w 1
+
+#Write Pin to Low
+gpiolib_test_S -p 20 -w 0
+
+#Set pin to output then init it to high
+gpiolib_test_S -p 20 -o 1
+
+#Set pin to output then init it to low
+gpiolib_test_S -p 20 -o 0
+
+-----------------------------------------------------------------------------------------------------------
+#  Set Mac --------------------------------------------
+	ps set m0 0:22:11:33:11:13 1 1
+or
+	IPMICmd 20 C 0 1 1 5 [MAC 6 byte]
+	IPMICmd 20 C 0 1 1 5 0 22 33 54 15 10
+
+	
+#  Sensor Test Mode -----------------------------------
+1. Sensor Test Mode On
+IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 0
+											   [On]
+2. Set Sensor Reading
+IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 1 [Sen#] [Sen Reading]
+                                               [Set]
+
+3. Sensor Test Mode Off
+IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 2
+											   [Off]
+	ex.	
+		Set Sensor Test Mode On
+		IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 0
+
+		Set CPU0 to 91 C
+		IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 1 31 5B
+
+		Set CPU0 to 94 C
+		IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 1 31 5e
+
+		Set CPU0 to 100 C
+		IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 1 31 64
+
+		Set CPU0 to 58C
+		IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 1 31 58
+
+		sensor Test Off
+		IPMICmd 0x20 0x2E 0x00 0xCC 0x5E 0x2B 0x00 4 40 2
+
+											   
+-----------------------------------------------------------------------------------------------------------
+#  ast2400 load code to RAM
+d;set serverip 10.99.6.204;tf 42600000 /1013/rootfs.squashfs;bootm 142c0000
+#  update firmware from tftp
+d;set serverip 10.99.6.204;set rootpath /1013/;run ru
+d;set serverip 10.99.0.32;run ru
+
+-----------------------------------------------------------------------------------------------------------
+#IPMITool command
+	ipmitool -I lanplus -H 10.99.6.85 -U admin -P Password1 raw 6 1
+
+#sensor reading
+	ipmitool -I lanplus -H 10.99.6.85 -U admin -P Password1 sensor
+
+#Bridge command to ME
+	ipmitool -I lanplus -H 10.99.6.92 -U admin -P Password1 -b 0 -t 0x2c raw 6 1
+	
+	#NetFn 0x2e CmdID 0x4B
+	ex. Get Temp command of CPU0 Memory Chl#0 Dimm#0 #1, Ch#1 Dimm#0 #1
+																									 [CPU0][chanel#1 2, DIMM#0 1]
+	ipmitool -I lanplus -H 10.99.6.92 -U admin -P Password1 -b 0 -t 0x2c raw 0x2E 0x4B 0x57 0x01 0x00 0x01 0x33 0x33 0x00 0x00 0x00 0x00 0x00 0x00 
+
+	ex. Get Temp command of CPU1 Memory Chl#2 Dimm#0 #1, Chl#3 Dimm#0 #1 
+																									 [CPU1]       [chanel#1 2, DIMM#0 1]
+	ipmitool -I lanplus -H 10.99.6.92 -U admin -P Password1 -b 0 -t 0x2c raw 0x2E 0x4B 0x57 0x02 0x00 0x02 0x00 0x00 0x33 0x33 0x00 0x00 0x00 0x00 
+
+	#NetFn 0x04 CmdID 0x2D
+	ex. Get Tj Max SensorNum # 0x30
+	ipmitool -I lanplus -H 10.99.6.92 -U admin -P Password1 -b 0 -t 0x2c raw 0x04 0x2D 0x30
+-----------------------------------------------------------------------------------------------------------
+#  Master write read to get data
+	ex. 
+	Bus ID:  
+	  [7:4] channel number
+	  [3:1] bus ID, 0 – based 
+	  [0]  bus type:
+		  0 = public bus (ex. IPMB or PCI Management Bus)
+		  1 = private bus (I2C / SMBus)
+
+	I2C Bus 5 => 0x0B
+	Slave Address 0x96
+	Read 2 bytes back 0x02
+	register 0x00
+
+IPMICmd 20 6 0 52 b 96 2 0
+vs
+ex. read sensor reading sensor# 0x30
+IPMICmd 20 4 0 2d 30
+

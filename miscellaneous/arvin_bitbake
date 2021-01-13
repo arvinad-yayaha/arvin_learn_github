@@ -1,0 +1,143 @@
+
+https://www.yoctoproject.org/docs/2.4/bitbake-user-manual/bitbake-user-manual.html
+
+=-=-=-=-=-=-=-
+Metadata is stored in
+- recipe (.bb)
+- recipe "append" (.bbappend) files - extec or override info in an existing recipe
+- configuration (.conf) - variables
+- underlying include (.inc) files
+- class (.bbclass)files - fetching / unpacking / configuring(empty by default) / compilling / installing(empty by default) / packaging(empty by default)
+
+PN: The recipe name.
+PV: The version of the recipe.
+PR: The revision of the recipe.
+TOPDIR: Points to the build directory. BitBake automatically sets this variable.
+
+=-=-=-=-=-=-=-
+bitbake -s # show all recipe name with version
+bitbake-layers show-layers # show current configured layers
+bitbake-layers show-recipes # like as bitbake -s, this also show the layers. 
+bitbake -c listtasks <recipe> # list what task/action can be used.
+bitbake target --runall=fetch # downloads the file only
+
+touch ./build/conf/sanity.conf # the bitbake can be execute build with root.
+
+
+=-=-=-=-=-=-=-
+bitbake  //文件獲取的工具,比如從源碼控制系統SVN GIT，或者從網站上獲取。
+ 
+meta-* //客製層，BSP
+ conf
+  layer.conf
+   BBFILES := "${BBFILES} ${LAYERDIR}/recipes-*/*/*.bb \
+         ${LAYERDIR}/recipes-*/*/*.bbappend"
+   //比通用層多了 .bbappend
+meta  //通用層，通用的例如SSH FTP等
+ conf
+  layer.conf  //保存一些BBPATH和BBFILES變量
+   BBPATH .= ":${LAYERDIR}" //conf以及classes目錄搜索配置文件和類文件
+   BBFILES += "${LAYERDIR}/recipes-*/*/*.bb" //定位菜譜bb文件和菜譜附加文件bbappend文件。
+  bitbake.conf  //包含了一些其他的變量。比如架構，機器 本地環境等等
+   PN="${@bb.parse.BBHandler.vars_from_file(d.getVar('FILE',False),d)[0] or 'defaultpkgname'}" //菜譜名字
+   PV="${@bb.parse.BBHandler.vars_from_file(d.getVar('FILE',False),d)[1] or '1.0'}"
+   //假如一個菜譜名叫something_1.2.3.bb 那麼這句命令就會設置 PN為something設置PV為1.2.3
+ classes //元數據之間用於共享一些信息
+  base.bbclass //所有的菜譜和classes總是會自動包含這個bbclass.這個類包含了一些標準的基本操作。比如獲取源碼，解壓 ，配置（默認為空），編譯（默認為空） 安裝（默認為空）和打包（默認為空）。這些基本操作常常繼承子類覆蓋是實際地實現這些功能
+ recipes-core/images/
+  core-image-base.bb  //製作 image ,meta-intel-iot-devkit/recipes-core/images/image-full.bb
+   IMAGE_FEATURES //選擇不同的PACKAGE_GROUP
+ recipes-*
+  PACKET_NAME
+   PACKET_NAM_%.bbappend // "%" 泛指所有的版本，bb文件一樣 有相同的根文件名。繼承或者覆蓋菜譜的一些信息。
+   PACKET_NAM_2.20.bb  //recipe,依賴庫，源碼位置，校驗和，描述等
+     DEPENDS += "gperf-native kconfig-frontends-native" //依賴。包括運行時依賴和構建時依賴
+     RDEPENDS = "cool-ttf-fonts"
+     //DEPENDS是build時需要哪個package，RDEPENDS則是執行時需要哪個package，也就是說如果該brook_1.0被加到image，則RDEPENDS所列的也都會被加到image之中。 
+   
+     PV = "2.20" //菜譜的版本,Package Name
+     //${PV}是Package Version。 
+     SRCREV = "b8079dd0d360648e4e8de48656c5c38972621072"
+      
+     //包的源碼,可以支援http、ftp、git、svn、file等
+     SRC_URI = "git://sourceware.org/git/glibc.git;branch=release/${PV}/master \
+                file://IO-acquire-lock-fix.patch"
+     //補丁。從哪裡獲取補丁。如何應用這些補丁
+     EGLIBCPATCHES = "file://timezone-re-written-tzselect-as-posix-sh.patch"
+     //如何配置(./configure)和編譯這些源碼
+     do_configure () {
+             if [ -z "`which rpcgen`" ]; then
+                     echo "rpcgen not found.  Install glibc-devel."
+                     exit 1
+             fi
+             (cd ${S} && gnu-configize) || die "failure in running gnu-configize"
+             find ${S} -name "configure" | xargs touch
+             CPPFLAGS="" oe_runconf
+     }
+     //這些包應該安裝在目標機器的什麼位置。
+     PROVIDES+="${PN}-2to3 ${PN}-audio ${PN}-codecs ${PN}-compile ${PN}-compression ${PN}-core" //bitbake開始尋找如何構建這個target。bitbake搜索每個recipes的PROVIDES列表。一個PROVIDES列表是對應菜譜可以知道的一些名字的list.每個菜譜的PROVIDES list通過菜譜的PN變量名字隱式到處。或者顯式地通過菜譜的PROVIDES變量導出。當一個菜譜使用PROVIDES來定義他的個功能的時候，可以通過可選名或者非PN變量的名字。
+     //比如菜譜名字是keyboard_1.0.bb 裡面包含了PROVIDES+=「fullkeyboard」 那麼這個菜譜的PROVIDES list 隱式的就是keyboard。fullkeyboard就是顯式的
+     PREFERRED_PROVIDER_virtual/kernel="linux-yocto"
+     //因為可能由很多的提供者。bitbake需要確定哪個優先級別比較高，一般和目標由相同的名字。很有必要搞清楚這個服務的提供者
+ 
+ 
+build //${TOPDIR} 指的就是這一層
+ conf
+  bblayers.conf
+   BBPATH  //搜索conf配置文件和class類文件的
+   BBFILES  //定位了bb菜譜文件和 bbappend菜譜附加文件
+   bblayers //用來指定layer層的位置和數據信息。BBLAYERS是一個layer目錄的list
+  local.conf
+ tmp
+  work //編譯目錄
+   i586-nlp-32-poky-linux  //library
+ 
+ 
+repo-ext(re)
+ linux-stable //所有 linux 版本 source code:
+   //https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/refs/?h=v4.1.45
+ linux-ltsi:所有 ltsi kernel patch 版本:
+   //http://git.linuxfoundation.org/?p=ltsi-kernel.git;a=shortlog
+  
+  meta-openembedded:OpenEmbedded Core layer
+   //http://cgit.openembedded.org/openembedded-core/tree?h=daisy
+   // h 代表是哪一種版本
+
+=-=-=-=-=-=-=-
+
+2）进入poky目录
+source oe-init-build-env 运行完此命令自动进入build目录（build目录为当前工作目录）
+
+3）设置BBLAYERS
+从build目录进入conf，修改bblayers.con文件设置BBLAYERS
+
+4）修改local.conf设置MACHINE，DL_DIR等变量，DL_DIR最好设置在build目录外部，这样不同的target可以使用同样的下载文件。
+5）运行bitbake core-image-minimal
+编译生成的结果存在于./tmp/deploy/images/$MACHINE/目录下
+
+————————————————
+版权声明：本文为CSDN博主「ambercctv」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/ambercctv/article/details/52460882
+
+=-=-=-=-=-=-=-
+
+在conf/local.conf文件提供了許多定義構建環境的基本變量。
+Target Machine Selection（目標機器選擇）: 由 MACHINE 控制.
+Download Directory（下載目錄）:           由 DL_DIR 控制.
+Shared State Directory（共享狀態目錄）:   由 SSTATE_DIR 控制.
+Build Output（構建輸出）:                 由 TMPDIR 控制.
+Distribution Policy（分配策略）:          由 DISTRO 控制 .
+Packaging Format（打包格式）:             由 PACKAGE_CLASSES 控制.
+SDK Target Architecture（SDK目標架構）:   由 SDKMACHINE 控制.
+Extra Image Packages（額外的image包）:    由 EXTRA_IMAGE_FEATURES 控制.
+
+=-=-=-=-=-=-=-
+
+
+
+
+
+
+
+
+

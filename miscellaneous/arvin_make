@@ -1,0 +1,67 @@
+## referance
+
+## parallel build
+## distributed build via LAN
+make -j
+Specifies the number of jobs (commands) to run simultaneously.  If there is more  than  one  -j
+            option,  the  last  one is effective.  If the -j option is given without an argument, make will
+            not limit the number of jobs that can run simultaneously.
+
+
+
+target ... : prerequisites ...
+	<TAB>command #the command should be start with a [Tab] key
+	...
+
+target(label): prerequisites
+	command
+target(label): prerequisites ; command
+
+## example ##
+aaaDIR=/home/froot/tool/
+aaaCFLAGS= -g -Wall -ansi
+
+all: a.o b.o c.o
+     gcc a.o b.o c.o -o abc.exe
+a.o: a.c a.h
+     gcc $(aaaCFLAGS) -c a.c
+b.o: b.c b.h
+     gcc $(aaaCFLAGS) -c b.c
+c.o: c.c c.h
+     gcc $(aaaCFLAGS) -c c.c
+clean:
+  rm *.o
+install:
+  @if[ -d $(aaaDIR) ];\
+  then \
+    cp abc.exe $(aaaDIR);\
+    echo "Installed in $(aaaDIR)";\
+  else \
+    echo " Sorry, $(aaaDIR) is not exist;\
+  fi
+
+##
+?= :
+  example: FOO ?= bar : if FOO did not used/defined, FOO = bar, 
+                      : otherwise, keep original value/string. 
++= :
+  example: below means CFLAGS = -wall -g -02
+          CFLAGS = -wall -g 
+          CFLAGS += -02
+:= : threat as inital value/string
+
+% : means *
+@ : not display when execute instructoin
+- : interrupt when instruction error.
+   example: "-rm *.o"
+
+$@ : current target/label name
+$< : current all prerequisites file
+$^ : current first prerequisites
+$* :
+
+
+execute shell command before pre make.
+SHELL_HACK := $(shell mkdir -p BUILD)
+
+

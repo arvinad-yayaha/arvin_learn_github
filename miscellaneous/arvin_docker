@@ -1,0 +1,173 @@
+# ===========================================
+# https://docs.docker.com/
+# ===========================================
+
+# the parent of Linux Mint 18.3 Sylvia is Ubuntu Xenial
+# the parent of Linux Mint 19 Tara is Ubuntu Bionic
+
+# ===========================================
+#Install docker CE on Linux Mint 18.3
+#!/usr/bin/env bash
+
+# https://docs.docker.com/install/linux/docker-ce/ubuntu/
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+# add Docker's official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+curl -x proxy -L target
+# verify the docker's key
+sudo apt-key fingerprint
+
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+
+# update apt package index 
+sudo apt-get update
+
+sudo apt-get install docker-ce
+# list the version available 
+apt-cache madison docker-ce
+  docker-ce | 18.03.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+# sudo apt-get install docker-ce=<VERSION>
+sudo apt-get install docker-ce=18.03.0~ce-0~ubuntu
+
+# https://docs.docker.com/compose/install/
+sudo curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# https://docs.docker.com/install/linux/linux-postinstall/
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+# ===========================================
+# Install from a package
+sudo dpkg -i /path/to/package.deb
+# verify
+sudo docker run hello-world
+
+# ===========================================
+# pull image from docker HUB (internet)
+docker pull ubuntu:14.04
+docker pull ubuntu:16.04
+
+docker search ubuntu:16.04
+
+# ===========================================
+docker image ls -a
+docker container ls -a
+
+# ========================================
+# commit a container
+docker commit -a "arvin" -m "for xxxx" [container id] REPOSITORY:TAG
+
+# remove docker all images and containers
+sudo docker rm -f $(sudo docker ps -a -q)
+sudo docker rmi $(sudo docker images -a -q)
+
+# modified repository name and tag name
+sudo docker tag [image id] repository name:tag name
+
+# ========================================
+# run container
+docker run
+docker run --name NAMES -it [container id] /bin/bash
+docker run --name NAMES -d [container id] /bin/bash
+docker run -p (host port):(container port) # port mapping
+
+docker start -i [container id] # start a container with entry command line.
+docker exec -it -u froot [container id] /bin/bash # froot is a user name that already exist in container.
+
+# ========================================
+# dokcer size
+docker info # execute this to got image location.
+-->  Docker Root Dir: /var/lib/docker
+
+# 
+sudo docker system df # check space
+systemctl stop docker ### shutdown docker service
+sudo mv /var/lib/docker /home/docker_rootdir/ # rsync -avzPHSX /var/lib/docker /home/docker_rootdir/
+# the chmod would be 711 --> drwx--x--x 15 root root 4.0K Apr 10 09:00 docker
+ln -sv /home/docker_rootdir/docker /var/lib/docker
+systemctl daemon-reload ### start docker service
+systemctl restart docker
+systemctl enable docker
+
+# create and modified below file for assign Docker Root Dir.
+mkdir -p /etc/systemd/system/docker.service.d/
+vim /etc/systemd/system/docker.service.d/devicemapper.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd --graph=/home/docker_rootdir/docker
+
+# ========================================
+# run GUI when container is ubuntu
+# https://www.youtube.com/watch?v=RDg6TRwiPtg
+# http://leoyeh.me:8080/2017/09/21/%E8%A7%A3%E6%B1%BA%E5%95%8F%E9%A1%8C-X11-2/ 
+
+Method1:
+step1: execute the "xauth list" in host # where you run the docker. 
+                                 # and copy the result I called "result 1"
+step2: sudo docker run -it --net=host -e DISPLAY -v /tmp/.X11-unix [image id] bash
+step3: execute the "xauth list" in container
+step4: execute the "xauth add [result 1]" in container
+
+tip: for open graphic interface, 
+     log in via ssh - "xauth generate :0 . trusted" + "export DISPLAY=:0"
+
+step2: sudo docker run -it -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix [image id] bash
+step3: in remote, ssh -X arvin@IP
+
+Method2:
+execute "xhost +local:root" in HOST before run docker
+
+# ========================================
+
+
+# set container hostname thst will show in the command line head
+CONH_NAME=build_shmdp
+# set container name
+CONTAINER_NAME=container_shmdp
+# mapping the ssh port 22 of container to port 32767 of host
+MAPPING_SSHPORT=32767:22
+# mapping the samba port 139 and 445 to HOST.
+MAPPING_SMBPORT1=139:139
+MAPPING_SMBPORT2=445:445
+
+IMAGEID=c24e5ac76cc4
+
+
+docker run --name $CONTAINER_NAME \
+     -h $CONH_NAME \
+     -p $MAPPING_SSHPORT \
+     -e DISPLAY \
+     -v /tmp/.X11-unix:/tmp/.X11-unix \
+     -v ~/project:/home/mnt_project \
+     -it $IMAGEID /bin/bash
+     -dt $IMAGEID /bin/bash -c "service ssh start; bash"
+
+MAPPING_PROJ_PATH=MAPPING_PROJ_PATH=~/project:/home/mnt_project
+docker run --name $CONTAINER_NAME \
+     -h $CONT_HOSTNAME \
+     -p $MAPPING_SSHPORT \
+     -e DISPLAY=$DISPLAY \
+     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+     -v $MAPPING_PROJ_PATH \
+     -it $IMAGEID \
+     /bin/bash -c "service ssh start; cd /home/mnt_project; bash"
+
+
+docker run -it \
+       --volume="$YOCTODIR:/yocto" \
+       --volume="${HOME}/.ssh:/home/${USER}/.ssh" \
+       --volume="${HOME}/.gitconfig:/home/${USER}/.gitconfig" \
+       --volume="/etc/localtime:/etc/localtime:ro" \
+       --env="DISPLAY" \
+       --env="QT_X11_NO_MITSHM=1" \
+       --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+       --env=HOST_UID=$(id -u) \
+       --env=HOST_GID=$(id -g) \
+       --env=USER=${USER} \
+       $(eval echo ${DOCKER_ARGS}) \
+       --name=$CONTAINER \
+       $IMAGE
+
+

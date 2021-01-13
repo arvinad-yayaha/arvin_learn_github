@@ -1,0 +1,8 @@
+
+
+# 2's complement of hexadecimal to decimal 
+# 16 bits.
+=MOD(HEX2DEC(A7)+2^15,2^16)-2^15
+
+
+

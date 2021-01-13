@@ -1,0 +1,32 @@
+# <type>(<scope>): <subject>
+
+# <blank>
+# <body>
+# [component]: none
+# [description]: none
+# [notes]: none
+
+# <blank>
+# <author>
+
+# Allowed <type> values:
+#  feat (new feature for the user, not a new feature for build script)
+#  fix (bug fix for the user, not a fix to a build script)
+#  docs (changes to the documentation)
+#  style (formatting, missing semi colons, etc; noproduction code change)
+#  refactor (refactoring production code, eg. renaming a variable)
+#  test (adding missing tests, refactoring tests; no productoin code change)
+#  chore (updating grunt tasks etc; noproduction code change)
+
+# For <scope>:
+# The <scope> can be empty(e.g. if the change is a global or difficault to assign to a single component), in which case the parentheses are omitted.
+
+# After second line is <body> which will include more information and list bellow.
+# [component]   : IPMI command, FRU, SDR .... etc.
+# [description] : much more detailed description for bug fix or new feature solution.
+# [notes]       : Anything you think it's noteworthy can be written here, ex.:
+#                 For what reason is this modification implemented if it's not a feature implementation or bug fix.
+#                 Who asked this modification and when is the request first received.
+#                 Referenced documents.
+#                 File Name of the Issue Analysis Report related to the issue fixed.
+#

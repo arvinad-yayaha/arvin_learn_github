@@ -1,0 +1,177 @@
+
+#install library and header for gcc
+libc6      - GNU C Library: Shared libraries 
+libc6-dev  - GNU C Library: Development Libraries and Header Files
+
+## install java source in system
+update-alternatives --install /usr/bin/java
+## choose default java
+update-alternatives --config java
+
+## make dash as default - dpkg is package manager for Debian
+dpkg-reconfigure dash 
+
+## linux version
+cat /etc/*release  # will display /etc/lsb-release  /etc/os-release
+
+## ================================
+## Usage: read 4 bytes from the physical address 0x12345678:
+sudo busybox devmem 0x12345678
+## Write 0x9abcdef0 to that address:
+sudo busybox devmem 0x12345678 w 0x9abcdef0
+
+## ================================
+## execute a program periodically,
+watch -n 10 xxx.sh
+
+## ================================
+## check folder/directory size.
+du -sh foldername
+
+## ================================
+## check folder/directory size.
+df -h
+## size for /    - 20G ( used 10G at 2018 10 16 in Linux Mint)
+## size for home - rest space 
+
+## ================================
+## execute a program periodically,
+## proxy for apt-get
+vim /etc/apt/apt.conf ## added this file. if not exist, and added below
+Acquire::http::Proxy "http://username:password@ProxyAddress:PortNum";
+
+
+## ================================
+## ssh
+## the private/public key file should be 600 for ssh permissions
+
+## check X11 forwarding
+cat /etc/ssh/sshd_config
+Add "AddressFamily inet" in ssh_config for docker image or speed up ssh.
+Add "UseDNS no" in ssh_config for speed up ssh.
+
+## X11 forwarding after sudo command
+sudo xauth add $(xauth -f ~/.Xauthority list|tail -1)
+## below is used to check and list info from the .Xauthority file
+xauth list        # list info from ~/.Xauthority
+sudo xauth list   # list info from /root/.Xauthority
+
+stdin (0)
+stdout(1)
+stderr(2)
+cmd 2>&1 | tee log.file
+cmd > log.file 2>&1
+cmd -arg > log.file 2>&1
+
+history -c # clear history
+history 12 # list 12 line for history
+!number # execute this line
+!command # execute lastest command
+ctrl + r # search history
+
+!number:p # print without execute
+
+
+
+## ================================
+## file and folder permision
+-rw-r--r-- 1 froot froot 3.4K Apr  2 08:37 arvin_linux
+-rw-r--r--: user onwer / group / others
+froot froot: owner / group
+
+chmod: change permssion
+chown: change owner
+chgrp: change group
+
+## ================================
+## user
+useradd arvin                 # added user arvin
+useradd -m -s /bin/bash arvin # added user -m(create home) -s(login shell)
+userdel --remove username     # remove user with home folder
+
+usermod -aG root,users arvin  # change group of  arvin into group root and users
+usermod --home /tmp arvin     # change default home directory.
+usermod --shell /bin/sh arvin # change the arvin's default shell
+
+passwd arvin  # modified user arvin's password
+
+usermod -a -G root arvin # add arvin into group root
+usermod -a -G sudo arvin # add arvin into group sudo list.
+
+groupadd groupname # add a groupname
+groupdel groupname # delete a groupname
+groups arvin # check what groiup arvin in.
+id arvin     # check arvin account information.
+
+cat /etc/group # list group
+# [Group name]:[Group password]:[GID]:[Group members]
+cat /etc/passwd    # list user name in linux
+# account:passwd:UID:GID:userinfo:homedir:shell
+# [username]:[x]:[UID]:[GID]:[Comment]:[Home directory]:[Default shell]
+
+add users from batch
+1. create user_list file which include as below
+user001::600:100:user:/home/user001:/bin/bash
+user002::601:100:user:/home/user002:/bin/bash
+2. import user via /usr/sbin/newusers
+newusers user_list
+  and then, check home directory and /etc/passwd
+3. execute " /usr/sbin/pwunconv"
+4. create password.txt file which include as below 
+user001:password
+user002:password
+5. import password via /usr/sbin/chpasswd
+chpasswd < password.txt
+6. execute " pwconv "
+
+
+
+awk -F':' '{ print $1}' /etc/passwd # list user name only
+cut -d: -f1 /etc/passwd #list user name only
+
+useradd -D # the default user setting when add user. /etc/default/useradd
+
+## ================================
+## jobs bg fg kill
+jobs # list jobs in back groud
+fg %1 # put number 1 task to front 
+kill %1 # 
+
+## ================================
+## install python with specify version
+python install
+step 1: Prerequsities
+sudo apt-get install build-essential checkinstall
+sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+
+step2: Download
+cd /usr/src
+sudo wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tgz
+sudo tar xzf Python-3.6.10.tgz
+
+step3: Compile
+cd Python-3.6.10
+sudo ./configure --enable-optimizations
+sudo make altinstall
+
+#//--enable-optimizations option with configure command to 
+#//                       enable additional supports like SSL, bz2 support.
+#//make altinstall is used to prevent replacing the default python binary file /usr/bin/python.
+
+
+## ================================
+## update-alternatives
+sudo update-alternatives --config python # check python's tool
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 2
+
+
+
+
+
+
+
+
+
+
+

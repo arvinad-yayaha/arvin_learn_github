@@ -1,0 +1,22 @@
+
+# ========================================
+# Setup MDS to Work with Containerized SSH
+# ========================================
+
+MDS supports SSH remote only with port 22. Since containerized SSH daemons run on non-standard SSH ports, we must set up port forwarding for MDS to remote SSH remote.
+
+1. Run "cmd" with administrator privilege
+
+2. In the "cmd" window, execute this command to forward localhost's TCP port 22 to TCP port 2001 of host 10.62.32.102.
+
+netsh interface portproxy add v4tov4 listenport=22 listenaddress=127.0.0.1 connectport=2001 connectaddress=10.62.32.102
+netsh interface portproxy add v4tov4 listenport=22 listenaddress=127.0.0.1 connectport=2002 connectaddress=10.62.32.102
+
+3. (optional) When you are done with MDS, execute this command to restore your TCP port 22.
+
+netsh interface portproxy delete v4tov4 listenport=22 listenaddress=127.0.0.1
+
+
+# ========================================
+
+

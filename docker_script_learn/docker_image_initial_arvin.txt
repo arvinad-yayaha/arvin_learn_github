@@ -1,0 +1,145 @@
+
+yum install -y \
+vim \
+
+
+
+apt-get update
+apt-get install -y \
+aptitude \
+ssh \
+vim curl \
+cscope exuberant-ctags \
+tmux meld \
+vim-gtk \
+locales \
+samba \
+git
+
+pdbedit 
+ssh = sshd
+vim-gtk = vim-gnome
+
+#for vs code
+sudo apt install ./code_1.32.3-1552606978_amd64.deb
+
+
+useradd -m -s /bin/bash froot
+passwd froot
+usermod -a -G sudo froot
+cat /etc/passwd
+groups
+
+service ssh start
+
+vim /etc/ssh/sshd_config
+# decrease the time when transfer the file.
++ UseDNS no
+#for X11 forwarding
++ AddressFamily inet
+
+pdbedit -a -u froot
+pdbedit -L
+
+vim /etc/samba/smb.conf
+
+[home]
+path=/home/
+available=yes
+valid users=@sudo
+write list=@sudo
+read only=no
+browseable=yes
+public=yes
+writable=yes
+map archive=no
+
+service samba start
+service smbd restart
+service nmbd restart
+
+smbpasswd froot
+
+-----------------------------------
+issue 1:
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_TIME = "en_US.UTF-8",
+	LC_MONETARY = "zh_TW.UTF-8",
+	LC_COLLATE = "zh_TW.UTF-8",
+	LC_ADDRESS = "zh_TW.UTF-8",
+	LC_TELEPHONE = "zh_TW.UTF-8",
+	LC_NAME = "zh_TW.UTF-8",
+	LC_MEASUREMENT = "zh_TW.UTF-8",
+	LC_IDENTIFICATION = "zh_TW.UTF-8",
+	LC_NUMERIC = "zh_TW.UTF-8",
+	LC_PAPER = "zh_TW.UTF-8",
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+
+
+===========================
+Generic MegaRAC® Development Studio Installation Guide 
+Revision: 1.3.7
+mds 12.0.1 - Ubuntu 16.04 with Python 2.7.11 
+
+--> Java Installation Steps
+MDS 4.x needs Oracle Java 1.8.
+Download latest JDK (tar.gz) from
+http://www.oracle.com/technetwork/java/javase/downloads
+$ tar -xvzf jdk-8u17-linux-x64.tar.gz 
+$ sudo mkdir -p /usr/lib/jvm/
+$ sudo mv jjdk1.8.0_202 /usr/lib/jvm/
+
+$ sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.8.0_202/bin/javac 1
+$ sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_202/bin/java 1
+$ sudo update-alternatives --install /usr/bin/javaws javaws /usr/lib/jvm/jdk1.8.0_202/bin/javaws 1
+
+$ sudo update-alternatives --config javac
+$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javaws
+
+--> required to build spx project.
+gcc-multilib
+mtd-utils:i386 - fail -> mtd-utils
+subversion
+patch
+patchutils
+bison
+libc6-dev
+libxml-dom-perl
+zlib1g
+zlib1g-dev
+libcurl4-openssl-dev
+libncurses5:i386 - fail -> libncurses5-dev
+python-numpy
+doxygen
+python-apt
+dmsetup
+python-svn
+libpcre3-dev
+netpbm
+sqlite3
+gawk
+graphviz
+
+sudo apt-get install -y php7.0-cli
+sudo apt-get install -y luajit
+sudo apt-get install -y nodejs
+sudo ln -s /usr/bin/nodejs /usr/bin/node 
+sudo apt-get install -y npm
+sudo npm i -gq grunt-cli bower coveralls
+sudo apt-get install -y cppcheck
+sudo apt-get install -y ssh-askpass
+sudo dpkg-reconfigure dash
+
+below is used for compile but those are not mentioned in MDS Install Guilde.
+sudo apt-get install -y bc
+beautifier -> libjavascript-beautifier-perl
+
+
+
+
+

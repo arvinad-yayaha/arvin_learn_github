@@ -1,0 +1,14 @@
+
+
+diff -Naur file1 file2 > project.patch
+diff -Naur dir1 dir2 > project.patch
+
+
+
+
+
+
+
+
+
+

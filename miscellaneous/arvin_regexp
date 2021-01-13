@@ -1,0 +1,101 @@
+## refer
+http://wanggen.myweb.hinet.net/ach2/ach2.html#rex
+http://wanggen.myweb.hinet.net/ach3/ach3.html
+
+## introduce ----
+'shell' did not support regular expression
+regular expression could be impact by env variable.
+  like as: LANG=POSIX
+basic regular expression 
+ - regex
+ - regexp
+ - posix-basic
+ - BRE
+ - RE
+ - support on vi / locate / find / grep / sed / awk
+meta-character -> need escape characters "\"
+ - {},(),<>,|
+Bracket Expressons : "[]"
+[]   : match a character. only a character event it is wrong a log of sign inside Brachet.
+POSIX Character: like as -> [:space:] [:punct:] [:uppper:] [:lower:]
+.    : match any charater
+[^i] : means not include i
+^i   : match character i at start of line
+i$   : match character i at end of line
+&    : euqal to the match word. example: 1,$ s/[A-Z][a-z][a-z]*/(&)/g
+{}   : match a repeat charater. 
+       example: echo 'google goooole gooooooole' | grep "go\{3,4\}"
+()   : match a repeat string. 
+       example: echo 'aalilitter litter lililiter' | grep "\(li\)*ter"
+()\1 : Back-Reference 
+       example: echo 'aeae aeaeoooaele mustPPale' | grep "\([a-zA-Z]\)\1
+                1,$ s/\(\<[0-9]*\>\) \(\<[a-z]*\>\) /\2 \1/g # exchange the location of number and character
+                1,$ s/\(\<aaarrv1\>\) \(\<aaarrv2\>\)/\2 \1/g # exchange aaarrv1 aaarrv2
+<>   : match a word
+       example: echo 'google google Solved SUDOKU PuPPa' | grep "\<[[:upper:]]*\>"
+                echo 'Google aGoogle Solved SUDOKU PuPPa' | grep "\<Google\>"
+|    : "or" match. 
+       example: echo 'google google Solved SUDOKU PuPPa' | grep "gle\|PPa"
+
+extened regular express
+ - posix-Extended
+ - support on find / grep / sed / awk
+
+## filter , must pipline or redirect to do filter.
+## 
+list filter - grep / cut / col/ tr / uniq / sort / sed / awk
+
+cut - cut field 
+ echo -e '12\t3\t456\t789' | cut -f 2,4
+ echo -e '12\t3\t456\t789' | cut -f 2-
+ echo -e '12\t3\t456\t789' | cut -f -3
+ echo -e '12\t3\t456\t789' | cut --output-delimiter="---" -f 1-
+ cat /etc/passwd | grep '/home' | cut -d ":" -f 1
+ echo '123456789' | cut -c 5
+
+tr - translate or deleee charater - simular 'sed' but simple. 
+ echo '012345' | tr 1 A
+ echo 'abcdef 123 XYZ' | tr 'a-z' 'A-Z'
+ echo -e "1\t\t\t2      3       4" | tr -s " \t"
+
+ tr -d '\r' < DOS_FILE > UNIX_FILE # very use ful, delete '\r' from Windows/DOS file 
+
+sort - 
+ sort -n -k 3 file.name # sort column3 and base on number
+
+sed - Steam Editer
+ sed [-OPTION] [ADD1][,ADD2] [COMMAND] [/PATTERN][/REPLACEMENT]/[FLAG] [FILE]
+ sed 	-e	'1,8	     s/	      [Tt]he/	   THE/	        g'	MyFile.txt
+
+FLAG: g / I / p / w
+ g (global replacement): [g] or [number]
+    example: echo 'aaaaa aaaaa' | sed 's/a/A/3'
+             echo 'aaaaa aaaaa' | sed 's/a/A/3g'
+             echo 'this is an apple' | sed 's/APPLE/banana/I'
+
+awk - Alfred 'A'ho, Peter 'W'einberger and Brian 'K'ernighan
+ NF (Number of Fields)
+    example: echo 'ab cd ef' | awk '{print NF}'
+ NR (Number of Records)
+
+
+
+## vim regular expression
+
+\    # for special charator
+\<   # shift-left the beginning of a word
+\>   # shift-right the end of a word,
+
+example:  ^IM(.)T(.+)$
+     ^ Match must start at first character
+     Match characters "IM"
+     (.) Match any single character 
+     Match Character "T"
+     (.+) Match number of characters
+     $ Match must end at last character
+
+
+
+
+
+

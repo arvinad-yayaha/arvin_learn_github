@@ -1,0 +1,21 @@
+
+rem The GetwayIP need to be change if you need
+rem Foxconn Getway
+set AGETWAYIP=10.32.8.1
+
+rem set AGETWAYIP=10.34.18.1
+
+rem private route gateway
+rem set AGETWAYIP=192.168.1.1
+rem private route gateway
+rem set AGETWAYIP=192.168.0.1
+
+route PRINT * %AGETWAYIP%
+route DELETE * %AGETWAYIP%
+
+route ADD 10.0.0.0 MASK 255.0.0.0 %AGETWAYIP%
+rem route ADD 10.32.0.0 MASK 255.255.0.0 %AGETWAYIP%
+route ADD 192.0.0.0 MASK 255.0.0.0 %AGETWAYIP%
+rem route ADD 172.0.0.0 MASK 255.0.0.0 %AGETWAYIP%
+route PRINT * %AGETWAYIP%
+PAUSE
