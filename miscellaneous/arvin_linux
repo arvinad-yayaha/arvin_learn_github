@@ -25,14 +25,22 @@ sudo busybox devmem 0x12345678 w 0x9abcdef0
 watch -n 10 xxx.sh
 
 ## ================================
-## check folder/directory size.
+## print folder/directory size.
 du -sh foldername
 
 ## ================================
-## check folder/directory size.
+## print disk size.
 df -h
 ## size for /    - 20G ( used 10G at 2018 10 16 in Linux Mint)
 ## size for home - rest space 
+
+
+## ================================
+## print disk information.
+sudo lshw -class disk
+sudo lsblk
+ls -l /dev/disk/by-path/
+sudo fdisk -l
 
 ## ================================
 ## execute a program periodically,
