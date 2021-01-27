@@ -8,7 +8,7 @@ ARVOPTION1="peanuts"
 ARVOPTION2="cubicle1"
 ARVOPTION3="SUT192"
 ARVOPTIONHELP="help"
-# 0 means not match
+# 0 means not match any option
 flag_MATCH=0
 
 function fun_aaarrvhelp
@@ -46,6 +46,7 @@ fi
 if [ "$1" == "$ARVOPTION1" ]; then
   # setting config
   AGATEWAY="10.57.184.1"
+
   LANP1="enp0s25"
   flag_MATCH=1
 
@@ -76,6 +77,7 @@ fi
 if [ "$1" == "$ARVOPTION2" ]; then
   # setting config
   AGATEWAY="10.32.8.1"
+# desktop
   WIFINAME="wlx90f652e3d4e8"
   LANP1="enp2s0"
   flag_MATCH=1
@@ -107,8 +109,12 @@ fi
 if [ "$1" == "$ARVOPTION3" ]; then
   # setting config
   AGATEWAY="192.168.0.1"
-  WIFINAME="wlp3s0"
-  LANP1="enp0s25"
+# notebook
+#  WIFINAME="wlp3s0"
+#  LANP1="enp0s25"
+# desktop
+  WIFINAME="wlx90f652e3d4e8"
+  LANP1="enp2s0"
   flag_MATCH=1
 
   echo ""
