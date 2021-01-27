@@ -1,3 +1,4 @@
+#================
 
 #referance
 # https://www.programering.com/a/MzM5ITNwATM.html
@@ -5,17 +6,20 @@
 ## load .vimrc when vim is executed.
 :source ~/.vimrc
 
-##################
+#================
+
 ^         = like as HOME key, not inclue space
 0         = HOME key
 $         = END key
 Ctrl+f    = Page Down
 Ctrl+b    = Page Up
 Ctrl+g/G  = currunt filename
-*         = search word that is in current cursor
+'#'/*     = search word that is in current cursor
+w/b       = next / pre word.
+%         = jump to match parenthesis [ {  () } ]
 
 yy / dd       : copy/delete a line
-nyy / ndd       : copy/delete n line
+nyy / ndd     : copy/delete n line
 
 p         : paste buffer after cursor.
 P         : paste buffer before cursor.
@@ -72,12 +76,14 @@ vi(       : choose/mark a area, from ( to ).
 :n     # jump to next one.
 :N     # jump to previous one.
 :file  # check currunt file name
-
 :files      # list open file
+
 N Ctrl+^    # jump to N number for file
 :help files # for more information
-:buffer # list item in the buffer
-
+:buffer   # list item in the buffer
+:buffers  # list files
+:bd       # close file
+:bd!      # force close file
 
 ####################
 # Hightlight
@@ -90,7 +96,7 @@ N Ctrl+^    # jump to N number for file
 :syntax off   #
 
 ####################
-# insermode completion
+# insert mode completion
 
 :help ins_completion
 Ctrl+N        # Complete a word, Search backwards for next matching line.
