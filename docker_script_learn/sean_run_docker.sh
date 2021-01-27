@@ -1,11 +1,11 @@
 #!/bin/sh
 
-#ie CANNAE_SRC="/home/shone02/projects/aws_repo/wmw-psc-fw-d9f5/"
-CANNAE_SRC="/home/eason/BMC_Code/Kroran"
-# ie HOME_PATH="/home/shone02"
-HOME_PATH="/home/eason"
-# ie MDS_WORKSPACE_PATH="/home/shone02/projects/mds_workspaces/4.0.1/"
-MDS_WORKSPACE_PATH="/home/eason/workspace_docker"
+#ie CANNAE_SRC="/home/xxx02/projects/aws_repo/wmw-psc-fw-d9f5/"
+CANNAE_SRC="/home/kid03/BMC_Code/Kroran"
+# ie HOME_PATH="/home/xxx02"
+HOME_PATH="/home/kid03"
+# ie MDS_WORKSPACE_PATH="/home/xxx02/projects/mds_workspaces/4.0.1/"
+MDS_WORKSPACE_PATH="/home/kid03/workspace_docker"
 
 if [ -z $CANNAE_SRC  ]
 then

@@ -1,8 +1,12 @@
 
+# this is file for ami source code env.
+# this is very eary I used to create biuld env.
+# therefore, some applicatoin would not be installed.
+# like as, editor tool / samba service / ssh service.
+# but, it still valuable for referance on some inforatoin.
+
 yum install -y \
 vim \
-
-
 
 apt-get update
 apt-get install -y \
