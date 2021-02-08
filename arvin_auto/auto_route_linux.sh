@@ -113,7 +113,11 @@ if [ "$1" == "$ARVOPTION3" ]; then
 #  WIFINAME="wlp3s0"
 #  LANP1="enp0s25"
 # desktop
-  WIFINAME="wlx90f652e3d4e8"
+  # TL-WN722N
+  # WIFINAME="wlx90f652e3d4e8"
+  # TL-WN725N
+  WIFINAME="wlxd03745d5ff24"
+
   LANP1="enp2s0"
   flag_MATCH=1
 
