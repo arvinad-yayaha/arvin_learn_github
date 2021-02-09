@@ -1,0 +1,94 @@
+# aaarrv/YaYaHa - 2021/02/09
+#
+# for openbmc container (docker)
+# the option and menu  
+# 
+
+echo "execute -- $0 "$@""
+echo "there are $# parameter"
+echo "====================="
+
+ARVOPTIONHELP="help"
+ARVOPTION1="nostart"
+ARVOPTION2="nostop"
+ARVOPTION3="exec"
+ARVOPTION4="stayin"
+# 0 means not match
+flag_MATCH=0
+flag_help=0
+flag_o1=0
+flag_o2=0
+flag_o3=0
+flag_o4=0
+
+
+function fun_aaarrvhelp
+{
+  if [ "$1" == "NOPARA" ]; then
+     echo "**** it needs option / parameter !!!!"
+  fi
+  if [ 0 == "$flag_MATCH" ]; then
+     echo "**** wrong parameter !!!!"
+  fi
+  echo ""
+  echo "menu for option"
+  echo "=== options : $ARVOPTION1"
+  echo "       script.sh $ARVOPTION1"
+  echo "=== options : $ARVOPTION2"
+  echo "       script.sh $ARVOPTION2"
+  echo "=== options : $ARVOPTION3"
+  echo "       script.sh $ARVOPTION3"
+  echo "=== options : $ARVOPTION4"
+  echo "       script.sh $ARVOPTION4"
+  echo "=== options : $ARVOPTIONHELP"
+  echo "       script.sh $ARVOPTIONHELP"
+
+}
+if [ "$#" == 0 ]; then
+# check if no parameter
+  flag_MATCH=1
+  fun_aaarrvhelp 'NOPARA'
+  exit 0
+fi
+
+for a in "$@";
+do
+  case $a in
+    $ARVOPTIONHELP)
+      flag_MATCH=1
+      flag_help=1
+      ;;
+    $ARVOPTION1)
+      flag_MATCH=1
+      flag_o1=1
+      ;;
+    $ARVOPTION2)
+      flag_MATCH=1
+      flag_o2=1
+      ;;
+    $ARVOPTION3)
+      flag_MATCH=1
+      flag_o3=1
+      ;;
+    $ARVOPTION4)
+      flag_MATCH=1
+      flag_o4=1
+      ;;
+    *)
+      #echo ""
+      echo " $a is not match parameter/arg "
+      #echo ""
+      ;; 
+  esac
+done
+
+if [ $flag_help == "1" ]; then
+  fun_aaarrvhelp
+  exit 0
+fi
+if [ $flag_MATCH == 0 ]; then
+  fun_aaarrvhelp
+  exit 0
+fi
+
+

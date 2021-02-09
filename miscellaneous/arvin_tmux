@@ -1,0 +1,40 @@
+# aaarrv / YaYaHa 2021/02/09
+#
+# tmux notes
+#
+
+session -> windows -> panes
+
+### pane control
+Ctrl+b % : vertical split pane 
+Ctrl+b " : horizontal split pane
+Ctrl+b o : switch to next pane
+Ctrl+b q : show pane name/number, type number and goto that pane
+Ctrl+b x : kill current pane.
+Ctrl+b ! : pane become window
+Ctrl+b z : pane zoom out / zoom in.
+
+### windows control
+Ctrl+b c : create window
+Ctrl+b w : switch / select window
+Ctrl+b n : switch next window 
+Ctrl+b p : switch previous window
+Ctrl+b <number> : switch to select <number> window
+Ctrl+b & : kill current window
+Ctrl+b , : rename window
+
+### session control
+Ctrl+b $ : rename session
+Ctrl+b d : detach session / means background
+Ctrl+b s : select session
+Ctrl+b ( : previous session
+Ctrl=B ) : next session
+
+
+#### list session
+tmux ls 
+#### kill session
+tmux kill-session -t target-session-number
+#### kill all session but the current session
+tmux kill-session -a
+

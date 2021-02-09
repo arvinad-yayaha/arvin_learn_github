@@ -95,6 +95,9 @@ N Ctrl+^    # jump to N number for file
 :syntax reset #
 :syntax off   #
 
+:noh          # disable highlight search result
+:set hlsearch # hightlight search result
+
 ####################
 # insert mode completion
 

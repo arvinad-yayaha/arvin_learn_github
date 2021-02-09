@@ -1,7 +1,18 @@
-# aaarrv/YaYaHa - 2021/01/27
+# aaarrv/YaYaHa - 2021/02/09
 #
 # execute bitbake to build openbmc target.
 # 
+
+
+ARVENVFILE="arv_menu_env_obmc.txt"
+if [ ! -e "./$ARVENVFILE" ]; then
+  echo "./$ARVENVFILE did not exist"
+  exit 0
+fi
+
+source "$ARVENVFILE"
+
+# === parameter for execute docker ====
 
 CONTAINER_NAME=conobmc
 
@@ -19,10 +30,23 @@ ARV_EXEC="\
      . openbmc-env; \
      bitbake $ARV_BUILD_TARGET; \
      "
+if [ $flag_o3 == "1" ]; then
+ARV_EXEC="\
+     . openbmc-env; \
+     bash; \
+     "
+fi
+
+# ===================================
 
 # == command start to execute 
-# start the container
-sudo docker start $SRC_ROOT_PATH 
+
+if [ $flag_o3 == "1" ]; then
+
+if [ $flag_o1 != "1" ]; then
+  echo "start the container"
+  sudo docker start $CONTAINER_NAME
+fi
 
 # below would not be modify.
 sudo docker exec \
@@ -35,7 +59,14 @@ sudo docker exec \
      $CONTAINER_NAME \
      /bin/bash -c "$ARV_EXEC"
 
-# stop the container
-sudo docker stop $SRC_ROOT_PATH
+if [ $flag_o1 != "1" ]; then
+  echo "stop the container"
+  sudo docker stop $CONTAINER_NAME 
+fi
 
+fi
+
+
+
+# ==== END of FILE ====
 
