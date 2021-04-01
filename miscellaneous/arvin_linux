@@ -32,8 +32,32 @@ du -sh foldername
 ## print disk size.
 df -h
 ## size for /    - 20G ( used 10G at 2018 10 16 in Linux Mint)
+##               - probably need 100G for Filesystem Root "/"
 ## size for home - rest space 
 
+## ================================
+# when Filesystem is out of space
+# have method to check size
+
+sudo du -a -m /var | sort -n -r | head -n 10
+# for reduce mlocate.db
+# method 1:
+# - modify `/etc/updatedb.conf` 
+# - add `/hadoop` to PRUNEPATHS variable
+# - `sudo updatedb` command
+# method 2: (not work)
+# - sudo pkill updatedb.mlocate
+# - sudo updatedb
+# method 3: directly delete mlocate.db.* and leave mlocate.db 
+# - sudo rm -f /var/lib/mlocate/mlocate.db.??????
+# - run `sudo /etc/cron.daily/mlocate`
+/var/lib/mlocate/mlocate.db
+# `apt autoclean` to reduce size
+sudo du -sh /var/cache/apt 
+# `sudo journalctl --vacuum-time=3d` for reduce size
+journalctl --disk-usage
+# `rm -rf ~/.cache/thumbnails/*` for reduce size
+du -sh ~/.cache/thumbnails
 
 ## ================================
 ## print disk information.
