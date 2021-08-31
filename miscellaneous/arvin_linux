@@ -60,6 +60,11 @@ journalctl --disk-usage
 du -sh ~/.cache/thumbnails
 
 ## ================================
+## system info
+sudo lshw
+sudo lshw -short
+
+## ================================
 ## print disk information.
 sudo lshw -class disk
 sudo lsblk
