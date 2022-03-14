@@ -1,7 +1,9 @@
 tftp -p -l /var/log/libmctp_lsi.txt -r libmctp_lsi.txt [IP address]
 
-tftp -g filename -r IP
-tftp -g -r filename IP
+tftp -g -r remotefilename IP # get remote file from tftp
+
+tftp -p -l localfilename IP # put local file to tftp.
+
 
 # ./busybox tftp --help
 BusyBox v0.61.pre (2003.02.04-12:10+0000) multi-call binary
