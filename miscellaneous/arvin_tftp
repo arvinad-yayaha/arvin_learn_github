@@ -1,5 +1,22 @@
 tftp -p -l /var/log/libmctp_lsi.txt -r libmctp_lsi.txt [IP address]
 
+tftp -g filename -r IP
+tftp -g -r filename IP
+
+# ./busybox tftp --help
+BusyBox v0.61.pre (2003.02.04-12:10+0000) multi-call binary
+
+Usage: tftp [OPTION]... HOST [PORT]
+
+Transfers a file from/to a tftp server using "octet" mode.
+
+Options:
+        -l FILE Local FILE.
+        -r FILE Remote FILE.
+        -g      Get file.
+        -p      Put file.
+
+
 =============== method1 =============================
 [success] this method is dowload only
 
@@ -68,7 +85,7 @@ Now our tftp server is up and running.
 
 
 
-=============== method2 =============================
+=============== method3 =============================
 [success]
 step 1:
 sudo aptitude install tftp-server
