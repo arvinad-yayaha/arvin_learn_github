@@ -1,0 +1,9 @@
+
+
+pacman -Qi package # check wich query and view package information
+pacman -Qi ceph-libs
+
+
+
+
+
