@@ -1,8 +1,20 @@
+# for arch base.
+# manjaro serial
 
+# pacman - package manager
 
-pacman -Qi package # check wich query and view package information
+pacman -Qi package # Q= Query / i= view package information
 pacman -Qi ceph-libs
 
+
+sudo pacman -Sy # S= Sync / y= reflash database
+sudo pacman -Syu # S= Sync / y= reflash database / u= upgrade installed package
+
+sudo pacman -S package # install package
+sudo pacman -S package1 package2 ... # intsall package1, package2, ...
+
+
+sudo pacman -R package # remove package 
 
 
 

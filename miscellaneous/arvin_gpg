@@ -1,4 +1,8 @@
 
+# gpg utility
+# is used OpenPGP encryption and signing tool
+# for GitHub. it needs noreply e-mail.
+
 
 $ gpg --list-secret-keys 
 /home/froot/.gnupg/pubring.kbx
