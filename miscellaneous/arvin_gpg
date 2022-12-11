@@ -1,0 +1,29 @@
+
+
+$ gpg --list-secret-keys 
+/home/froot/.gnupg/pubring.kbx
+------------------------------
+sec   rsa4096 2022-12-11 [SC]
+      2E0FF02EF8019F8E9F701E9C13E489B0CC40DD6C
+uid           [ultimate] <userid> <user@mail.test.com>
+ssb   rsa4096 2022-12-11 [E]
+
+$ gpg --list-secret-keys --keyid-format=long
+/home/froot/.gnupg/pubring.kbx
+------------------------------
+sec   rsa4096/13E489B0CC40DD6C 2022-12-11 [SC]
+      2E0FF02EF8019F8E9F701E9C13E489B0CC40DD6C
+uid                 [ultimate] <userid> <user@mail.test.com>
+ssb   rsa4096/6FABEBFB598F766F 2022-12-11 [E]
+
+Fingerprint: 2E0FF02EF8019F8E9F701E9C13E489B0CC40DD6C
+Long key ID:                         13E489B0CC40DD6C
+Short key ID:                                CC40DD6C
+
+
+
+
+
+
+
+

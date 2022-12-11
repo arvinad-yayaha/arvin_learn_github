@@ -29,6 +29,11 @@ https://blog.yorkxin.org/2011/07/29/git-rebase
  git config --global user.default matching  # push all the same branch name to remote.
  git config --global user.default simple    # push currunt branch to remote.
 
+ git config --global user.signingkey [gpg key] # add gpg key - gpg --list-secret-keys
+ git config --global commit.gpgsign true  # sign 
+ git config --global --unset gpg.format   # clear the tag
+ 
+
  git status ## very very important IIVI.
 
  git branch #list curruntly branch	
@@ -121,6 +126,12 @@ rm -rf public-repo.git
 # git clone whithout ssl varify and ssh key.
 # for https git clone https://xxxx
 export GIT_SSL_NO_VERIFY=1
+
+#-----------------------------
+
+
+
+
 
 #-----------------------------
 ########
